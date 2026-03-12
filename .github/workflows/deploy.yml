@@ -1,15 +1,13 @@
-name: Deploy Service
+name: Deploy Service Demo
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # 直接调用中心化标准模板
+  # 纯净调用，不传递任何敏感信息
   call-standard-pipeline:
-    uses: zentrix566/my-devops-core/.github/workflows/java-standard-ci.yml@v1
+    uses: zentrix566/my-devops-core/.github/workflows/java-standard-ci.yml@main
     with:
-      service_name: "order-service"
+      service_name: "test-app-service"
       java_version: "17"
-      # build_command: "mvn package -Pprod" # 如果有特殊打包需求可以传
-    secrets: inherit # 核心进步：一键继承所有仓库秘钥（账号密码、Token等）
