@@ -5,11 +5,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  call-workflow:
-    # 引用中央仓库的定义
+  # 直接调用中心化标准模板
+  call-standard-pipeline:
     uses: zentrix566/my-devops-core/.github/workflows/java-standard-ci.yml@v1
     with:
       service_name: "order-service"
       java_version: "17"
-    secrets:
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      # build_command: "mvn package -Pprod" # 如果有特殊打包需求可以传
+    secrets: inherit # 核心进步：一键继承所有仓库秘钥（账号密码、Token等）
