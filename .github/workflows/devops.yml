@@ -5,36 +5,10 @@ on:
     branches: [ "main", "feature/**" ]
 
 jobs:
-  # 1. 继承：调用中央仓库的标准流水线
   central-delivery:
+    # 引用你中央仓库定义的标准工作流
     uses: zentrix566/my-devops-core/.github/workflows/standard-build.yml@main
     with:
       service_name: "test-devops-core"
-    secrets: inherit
-
-  # 2. 扩展：子仓库特有的模拟功能 —— 性能压测
-  # 关键点：使用 needs 确保在中央流水线跑完后再执行
-  performance-test:
-    needs: central-delivery
-    runs-on: ubuntu-latest
-    steps:
-      - name: "模拟性能压测 (Locust/JMeter)"
-        run: |
-          echo "### 📊 性能压测报告" >> $GITHUB_STEP_SUMMARY
-          echo "正在对服务 test-devops-core 进行并发测试..."
-          sleep 5 
-          echo "| 指标 | 数值 |" >> $GITHUB_STEP_SUMMARY
-          echo "| :--- | :--- |" >> $GITHUB_STEP_SUMMARY
-          echo "| 平均响应时间 | 45ms |" >> $GITHUB_STEP_SUMMARY
-          echo "| 吞吐量 (TPS) | 1200 |" >> $GITHUB_STEP_SUMMARY
-          echo "✅ 性能指标达标！"
-
-  # 3. 扩展：子仓库特有的模拟功能 —— 飞书/钉钉通知
-  notify:
-    needs: ["performance-test"] # 只有压测过了才通知
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: "模拟发送飞书通知"
-        run: |
-          echo "发送通知到开发群：项目 test-devops-core 交付流水线执行完毕，结果：${{ job.status }}"
+    secrets:
+      inherit
